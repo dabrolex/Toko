@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kérastase Paris - Official Online Store & AI Hair Advisor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#D4AF37',
+                            500: '#C5A028',
+                            600: '#AA820A',
+                        },
+                        dark: '#121212',
+                        cream: '#FAF8F5'
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAF8F5;
+            color: #1A1A1A;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-cream text-gray-800 antialiased flex flex-col min-h-screen">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-dark text-white text-xs py-2 px-4 text-center tracking-widest uppercase">
+        <span class="text-gold-400 font-semibold">Gratis Ongkir</span> Seluruh Indonesia untuk Pembelian di Atas Rp 1.500.000 &bull; 100% Produk Original Kérastase
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-gray-700 hover:text-black focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Brand Logo -->
+                <div class="flex-1 md:flex-none text-center md:text-left cursor-pointer" onclick="filterProducts('all')">
+                    <h1 class="font-serif text-2xl md:text-3xl font-bold tracking-wider text-dark">KÉRASTASE</h1>
+                    <p class="text-[9px] tracking-[0.3em] uppercase text-gold-500 font-medium -mt-1">PARIS</p>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-wider">
+                    <button onclick="filterProducts('all')" class="nav-link text-black hover:text-gold-500 transition-colors py-1 border-b-2 border-gold-400">Semua Produk</button>
+                    <button onclick="filterProducts('shampoo')" class="nav-link text-gray-600 hover:text-gold-500 transition-colors py-1 border-b-2 border-transparent">Bain (Sampo)</button>
+                    <button onclick="filterProducts('serum')" class="nav-link text-gray-600 hover:text-gold-500 transition-colors py-1 border-b-2 border-transparent">Serum & Minyak</button>
+                    <button onclick="filterProducts('mask')" class="nav-link text-gray-600 hover:text-gold-500 transition-colors py-1 border-b-2 border-transparent">Masque (Masker)</button>
+                    <button onclick="filterProducts('conditioner')" class="nav-link text-gray-600 hover:text-gold-500 transition-colors py-1 border-b-2 border-transparent">Fondant (Kondisioner)</button>
+                </nav>
+
+                <!-- Search & Cart Actions -->
+                <div class="flex items-center space-x-5">
+                    <div class="relative hidden sm:block">
+                        <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Cari produk Kérastase..." class="w-44 md:w-56 pl-9 pr-3 py-1.5 text-xs bg-gray-100 rounded-full focus:outline-none focus:ring-1 focus:ring-gold-500 transition-all">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                    </div>
+
+                    <button id="cart-btn" onclick="openCartDrawer()" class="relative p-2 text-gray-800 hover:text-gold-500 transition-colors">
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-gold-500 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                    </button>
+
+                    <!-- AI Hair Assistant Button -->
+                    <button onclick="toggleAiDrawer()" class="relative p-2 text-gold-500 hover:text-gold-600 transition-colors flex items-center space-x-1 bg-gold-400/10 hover:bg-gold-400/20 px-3 py-1.5 rounded-full border border-gold-400/30 text-xs font-semibold">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span class="hidden md:inline">Konsultasi AI</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search (Sub Header) -->
+        <div class="sm:hidden px-4 pb-3">
+            <div class="relative w-full">
+                <input type="text" id="search-input-mobile" onkeyup="handleSearchMobile()" placeholder="Cari perawatan rambut..." class="w-full pl-9 pr-3 py-2 text-xs bg-gray-100 rounded-full focus:outline-none focus:ring-1 focus:ring-gold-500">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-400 text-xs"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden">
+        <div class="bg-white w-4/5 max-w-xs h-full p-6 shadow-xl flex flex-col justify-between transform -translate-x-full transition-transform duration-300 id-slide-container">
+            <div>
+                <div class="flex justify-between items-center pb-6 border-b border-gray-100">
+                    <h2 class="font-serif text-xl font-bold">KÉRASTASE</h2>
+                    <button onclick="toggleMobileMenu()" class="text-gray-500 text-xl"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <nav class="mt-6 space-y-4 text-sm font-medium">
+                    <button onclick="filterProducts('all'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-gray-50 text-gray-800 hover:text-gold-500">Semua Produk</button>
+                    <button onclick="filterProducts('shampoo'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-gray-50 text-gray-600 hover:text-gold-500">Bain (Sampo)</button>
+                    <button onclick="filterProducts('serum'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-gray-50 text-gray-600 hover:text-gold-500">Serum & Minyak Hair</button>
+                    <button onclick="filterProducts('mask'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-gray-50 text-gray-600 hover:text-gold-500">Masque (Masker Rambut)</button>
+                    <button onclick="filterProducts('conditioner'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-gray-50 text-gray-600 hover:text-gold-500">Fondant (Kondisioner)</button>
+                </nav>
+            </div>
+            <div class="pt-6 border-t border-gray-100 text-xs text-gray-500 text-center">
+                <p class="font-semibold text-gray-700">Layanan Konsultasi Salon</p>
+                <p class="mt-1">Hubungi Hair Expert kami via WhatsApp</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <section class="relative bg-dark text-white py-16 md:py-24 overflow-hidden">
+        <div class="absolute inset-0 opacity-40">
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1600&auto=format&fit=crop" alt="Kerastase Hair Care" class="w-full h-full object-cover">
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left flex flex-col md:flex-row items-center justify-between">
+            <div class="max-w-xl mb-8 md:mb-0">
+                <span class="text-gold-400 uppercase text-xs tracking-widest font-semibold bg-gold-400/10 px-3 py-1 rounded-full border border-gold-400/30 inline-block mb-4">Mewah & Profesional</span>
+                <h2 class="font-serif text-3xl md:text-5xl font-normal leading-tight mb-4">Kembalikan Kilau & Kesehatan Rambut Anda</h2>
+                <p class="text-gray-300 text-sm md:text-base font-light mb-6">Perawatan rambut ikonik khas salon Prancis terkini. Dapatkan diagnosis dan produk Kérastase 100% Asli dengan penawaran eksklusif.</p>
+                <a href="#product-section" class="inline-block bg-gold-500 hover:bg-gold-600 text-white font-medium text-xs md:text-sm uppercase tracking-widest py-3 px-8 rounded-full shadow-lg transition-all transform hover:-translate-y-0.5">Jelajahi Koleksi</a>
+            </div>
+            
+            <!-- Quick Hair Diagnostic Widget -->
+            <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 w-full md:w-80 text-left">
+                <h3 class="font-serif text-lg font-medium text-white mb-2"><i class="fa-solid fa-sparkles text-gold-400 mr-2"></i>Cari Perawatan Tepat</h3>
+                <p class="text-xs text-gray-300 mb-4">Pilih jenis kendala rambut Anda untuk rekomendasi instan atau tanya AI Hair Expert kami:</p>
+                <select id="concern-select" onchange="filterByConcern()" class="w-full bg-white text-gray-800 text-xs rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-gold-500 mb-2">
+                    <option value="">-- Pilih Keluhan Rambut --</option>
+                    <option value="Rontok">Rontok / Menipis (Genesis)</option>
+                    <option value="Kering">Kering & Kasar (Nutritive)</option>
+                    <option value="Kusam">Kusam & Butuh Kilau (Elixir)</option>
+                    <option value="Rusak">Rambut Rusak / Bercabang (Resistance)</option>
+                    <option value="Ketombe">Ketombe & Kulit Kepala (Symbiose)</option>
+                </select>
+                <button onclick="toggleAiDrawer()" class="w-full bg-gold-500 hover:bg-gold-600 text-white font-medium text-xs py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Tanya AI Hair Expert</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main id="product-section" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+        
+        <!-- Filter & Title Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-gray-200 gap-4">
+            <div>
+                <h2 id="category-title" class="font-serif text-2xl md:text-3xl font-bold text-gray-900">Semua Produk Kérastase</h2>
+                <p id="product-count" class="text-xs text-gray-500 mt-1">Menampilkan seluruh koleksi unggulan</p>
+            </div>
+
+            <!-- Category Pills for Quick Filter -->
+            <div class="flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none text-xs">
+                <button onclick="filterProducts('all')" class="pill-btn active-pill bg-dark text-white px-4 py-2 rounded-full whitespace-nowrap transition-all">Semua</button>
+                <button onclick="filterProducts('shampoo')" class="pill-btn bg-white border border-gray-200 text-gray-700 hover:border-gold-500 px-4 py-2 rounded-full whitespace-nowrap transition-all">Sampo</button>
+                <button onclick="filterProducts('serum')" class="pill-btn bg-white border border-gray-200 text-gray-700 hover:border-gold-500 px-4 py-2 rounded-full whitespace-nowrap transition-all">Serum & Oil</button>
+                <button onclick="filterProducts('mask')" class="pill-btn bg-white border border-gray-200 text-gray-700 hover:border-gold-500 px-4 py-2 rounded-full whitespace-nowrap transition-all">Masker</button>
+                <button onclick="filterProducts('conditioner')" class="pill-btn bg-white border border-gray-200 text-gray-700 hover:border-gold-500 px-4 py-2 rounded-full whitespace-nowrap transition-all">Kondisioner</button>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            <!-- Dynamic JavaScript Product Injection -->
+        </div>
+
+        <!-- Empty State Message -->
+        <div id="empty-state" class="hidden text-center py-16">
+            <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-3"></i>
+            <h3 class="text-lg font-medium text-gray-700">Produk tidak ditemukan</h3>
+            <p class="text-xs text-gray-500 mt-1">Coba kata kunci pencarian lain atau pilih kategori yang berbeda.</p>
+            <button onclick="filterProducts('all')" class="mt-4 inline-block text-xs bg-gold-500 text-white px-5 py-2 rounded-full font-medium">Lihat Semua Produk</button>
+        </div>
+
+    </main>
+
+    <!-- Shopping Cart Slide-over Panel -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="fixed inset-y-0 right-0 max-w-full flex">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 id-cart-container">
+                
+                <!-- Cart Header -->
+                <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-cream">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-bag-shopping text-gold-500"></i>
+                        <h3 class="font-serif font-bold text-lg text-gray-900">Keranjang Belanja</h3>
+                    </div>
+                    <button onclick="closeCartDrawer()" class="text-gray-400 hover:text-gray-600 p-2 text-lg">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Items List -->
+                <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4">
+                    <!-- Dynamic cart items here -->
+                </div>
+
+                <!-- Cart Footer Summary -->
+                <div class="p-5 border-t border-gray-100 bg-white space-y-4">
+                    <div class="space-y-2 text-xs">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Subtotal</span>
+                            <span id="cart-subtotal">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Pengiriman</span>
+                            <span class="text-green-600 font-semibold">GRATIS</span>
+                        </div>
+                        <div class="flex justify-between text-sm font-bold text-gray-900 pt-2 border-t border-gray-100">
+                            <span>Total</span>
+                            <span id="cart-total" class="text-gold-600">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <button onclick="openCheckoutModal()" class="w-full bg-dark hover:bg-black text-white font-medium text-xs uppercase tracking-wider py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span>Lanjut ke Pembayaran</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Hair Consultation Drawer -->
+    <div id="ai-drawer" class="fixed inset-0 z-50 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="fixed inset-y-0 right-0 max-w-full flex">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 id-ai-container">
+                
+                <!-- AI Header -->
+                <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-dark text-white">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-full bg-gold-500/20 border border-gold-400 flex items-center justify-center text-gold-400">
+                            <i class="fa-solid fa-sparkles text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif font-bold text-base text-white">Kérastase AI Hair Advisor</h3>
+                            <p class="text-[10px] text-gold-400 tracking-wider uppercase">Konsultasi Diagnosis Pintar</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleAiDrawer()" class="text-gray-400 hover:text-white p-2 text-lg">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Chat Body -->
+                <div id="ai-chat-body" class="flex-1 overflow-y-auto p-4 space-y-4 bg-cream text-xs">
+                    <!-- AI Welcome Message -->
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-2">
+                        <p class="font-semibold text-gray-800"><i class="fa-solid fa-robot text-gold-500 mr-1.5"></i> Bonjour! Saya Hair Care Specialist AI Kérastase.</p>
+                        <p class="text-gray-600 leading-relaxed">Ceritakan kondisi rambut Anda (misal: rontok parah setelah diwarnai, kulit kepala gatal & berminyak, atau butuh proteksi catok) untuk rekomendasi rangkaian produk yang presisi!</p>
+                        
+                        <!-- Sample Chips -->
+                        <div class="pt-2 flex flex-wrap gap-1.5">
+                            <button onclick="sendQuickAiQuery('Rambut saya sering dicatok dan pecah-pecah di ujung. Pakai produk yang mana?')" class="bg-cream hover:bg-gold-500 hover:text-white text-gray-700 px-2.5 py-1 rounded-full text-[10px] border border-gray-200 transition-all">Rambut bercabang & dicatok</button>
+                            <button onclick="sendQuickAiQuery('Rambut rontok banyak saat disisir dan kulit kepala agak lepek.')" class="bg-cream hover:bg-gold-500 hover:text-white text-gray-700 px-2.5 py-1 rounded-full text-[10px] border border-gray-200 transition-all">Rontok & Lepek</button>
+                            <button onclick="sendQuickAiQuery('Bagaimana urutan pemakaian Elixir Ultime Hair Oil yang benar?')" class="bg-cream hover:bg-gold-500 hover:text-white text-gray-700 px-2.5 py-1 rounded-full text-[10px] border border-gray-200 transition-all">Urutan Elixir Ultime</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input Area -->
+                <div class="p-4 border-t border-gray-100 bg-white space-y-2">
+                    <div class="flex items-center space-x-2">
+                        <textarea id="ai-input" rows="2" placeholder="Tuliskan masalah atau pertanyaan rambut Anda..." class="flex-1 border border-gray-200 rounded-xl p-2.5 text-xs focus:ring-1 focus:ring-gold-500 focus:outline-none resize-none"></textarea>
+                        <button id="ai-send-btn" onclick="handleAiConsultation()" class="bg-gold-500 hover:bg-gold-600 text-white p-3 rounded-xl transition-all flex items-center justify-center">
+                            <i class="fa-solid fa-paper-plane text-sm"></i>
+                        </button>
+                    </div>
+                    <p class="text-[9px] text-gray-400 text-center">Powered by Gemini AI Specialist Engine</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 id-modal-container">
+            <div id="modal-content">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl p-6 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            
+            <h3 class="font-serif text-2xl font-bold text-gray-900 mb-1">Form Pemesanan</h3>
+            <p class="text-xs text-gray-500 mb-6">Lengkapi data untuk penyelesaian pesanan via WhatsApp Official Salon.</p>
+
+            <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-medium text-gray-700 mb-1">Nama Lengkap *</label>
+                    <input type="text" id="cust-name" required placeholder="Contoh: Amanda Putri" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-1 focus:ring-gold-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-medium text-gray-700 mb-1">Nomor WhatsApp *</label>
+                    <input type="tel" id="cust-phone" required placeholder="Contoh: 08123456789" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-1 focus:ring-gold-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-medium text-gray-700 mb-1">Alamat Pengiriman Lengkap *</label>
+                    <textarea id="cust-address" required rows="3" placeholder="Jl. Mawar No. 12, Kec. Kebayoran Baru, Jakarta Selatan..." class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-1 focus:ring-gold-500 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block font-medium text-gray-700 mb-1">Metode Pembayaran Preferensi</label>
+                    <select id="cust-payment" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-1 focus:ring-gold-500 focus:outline-none">
+                        <option value="Transfer Bank (BCA/Mandiri)">Transfer Bank (BCA / Mandiri)</option>
+                        <option value="QRIS / GoPay / OVO">QRIS / E-Wallet</option>
+                        <option value="Kartu Kredit">Kartu Kredit</option>
+                    </select>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase">Total Pesanan</p>
+                        <p id="checkout-total-price" class="text-base font-bold text-gold-600">Rp 0</p>
+                    </div>
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-medium text-xs px-6 py-3 rounded-xl shadow-md transition-all flex items-center space-x-2">
+                        <i class="fa-brands fa-whatsapp text-base"></i>
+                        <span>Kirim Pesanan (WA)</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-12 pb-8 mt-16 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            
+            <div class="space-y-3">
+                <h3 class="font-serif text-2xl font-bold tracking-wider">KÉRASTASE</h3>
+                <p class="text-xs text-gray-400 leading-relaxed">Penyedia perawatan rambut mewah nomor 1 di dunia. Solusi khusus yang disesuaikan untuk setiap jenis rambut dan kulit kepala.</p>
+                <div class="flex space-x-3 pt-2">
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:bg-gold-500 hover:text-white transition-all text-xs"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:bg-gold-500 hover:text-white transition-all text-xs"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:bg-gold-500 hover:text-white transition-all text-xs"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-serif text-sm font-semibold uppercase tracking-wider mb-4 text-gold-400">Kategori</h4>
+                <ul class="space-y-2 text-xs text-gray-400">
+                    <li><a href="#" onclick="filterProducts('shampoo')" class="hover:text-white transition-colors">Bain (Shampoo)</a></li>
+                    <li><a href="#" onclick="filterProducts('serum')" class="hover:text-white transition-colors">Serum & Hair Oil</a></li>
+                    <li><a href="#" onclick="filterProducts('mask')" class="hover:text-white transition-colors">Masque (Hair Mask)</a></li>
+                    <li><a href="#" onclick="filterProducts('conditioner')" class="hover:text-white transition-colors">Fondant (Conditioner)</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-serif text-sm font-semibold uppercase tracking-wider mb-4 text-gold-400">Layanan Pelanggan</h4>
+                <ul class="space-y-2 text-xs text-gray-400">
+                    <li><a href="#" class="hover:text-white transition-colors">Konsultasi Diagnosis Gratis</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Cek Keaslian Produk</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Panduan Pengiriman</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Kebijakan Pengembalian</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-serif text-sm font-semibold uppercase tracking-wider mb-4 text-gold-400">Jaminan Kualitas</h4>
+                <div class="space-y-3 text-xs text-gray-400">
+                    <div class="flex items-start space-x-2">
+                        <i class="fa-solid fa-shield-check text-gold-400 text-sm mt-0.5"></i>
+                        <span>100% Produk Original Garansi Uang Kembali</span>
+                    </div>
+                    <div class="flex items-start space-x-2">
+                        <i class="fa-solid fa-truck-fast text-gold-400 text-sm mt-0.5"></i>
+                        <span>Pengiriman Aman dengan Bubble Wrap Tebal</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 border-t border-gray-800 text-center text-xs text-gray-500">
+            <p>&copy; 2026 Kérastase Official Partner Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data Produk Kerastase
+        const products = [
+            {
+                id: 1,
+                name: "Elixir Ultime L'Huile Originale",
+                category: "serum",
+                concern: "Kusam",
+                price: 920000,
+                rating: 4.9,
+                reviews: 128,
+                image: "https://images.unsplash.com/photo-1608248597261-833258657b45?q=80&w=800&auto=format&fit=crop",
+                description: "Minyak rambut serbaguna ikonik Kerastase dengan kandungan Wild & French Camellia Oil untuk kilau mutlak, menutrisi hingga ke dalam, dan melindungi rambut dari panas hingga 230°C.",
+                volume: "100 ml"
+            },
+            {
+                id: 2,
+                name: "Genesis Bain Hydra-Fortifiant",
+                category: "shampoo",
+                concern: "Rontok",
+                price: 510000,
+                rating: 4.8,
+                reviews: 95,
+                image: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=800&auto=format&fit=crop",
+                description: "Sampo penguat rambut anti-rontok untuk rambut tipis atau berminyak. Mengandung Edelweiss Native Cells & Ginger Root yang memperkuat serat rambut dan mengurangi kerontokan karena patah.",
+                volume: "250 ml"
+            },
+            {
+                id: 3,
+                name: "Nutritive Masquintense Hair Mask",
+                category: "mask",
+                concern: "Kering",
+                price: 840000,
+                rating: 4.9,
+                reviews: 76,
+                image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?q=80&w=800&auto=format&fit=crop",
+                description: "Masker konsentrat tinggi nutrisi essensial untuk rambut sangat kering. Melembutkan seketika dan memberikan kelembapan tahan lama tanpa membuat rambut terasa berat.",
+                volume: "200 ml"
+            },
+            {
+                id: 4,
+                name: "Chronologiste Huile de Parfum",
+                category: "serum",
+                concern: "Kusam",
+                price: 1150000,
+                rating: 5.0,
+                reviews: 64,
+                image: "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=800&auto=format&fit=crop",
+                description: "Minyak wangi rambut mewah hasil kreasi perfumer ternama. Mengharumkan dengan aroma bunga mewah sekaligus melembutkan dan mengurangi rambut bercabang.",
+                volume: "100 ml"
+            },
+            {
+                id: 5,
+                name: "Resistance Bain Force Architecte",
+                category: "shampoo",
+                concern: "Rusak",
+                price: 490000,
+                rating: 4.7,
+                reviews: 110,
+                image: "https://images.unsplash.com/photo-1585232351009-aa87416fec90?q=80&w=800&auto=format&fit=crop",
+                description: "Sampo rekonstruksi untuk rambut rusak, rapuh, dan bercabang (tingkat kerusakan 1-2). Mengembalikan kekuatan struktur serat rambut dari dalam.",
+                volume: "250 ml"
+            },
+            {
+                id: 6,
+                name: "Symbiose Bain Purete Anti-Pelliculaire",
+                category: "shampoo",
+                concern: "Ketombe",
+                price: 530000,
+                rating: 4.8,
+                reviews: 42,
+                image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=800&auto=format&fit=crop",
+                description: "Sampo anti-ketombe seluler tanpa silikon untuk kulit kepala berminyak & sensitif. Menghilangkan ketombe secara efektif dan menyegarkan kulit kepala.",
+                volume: "250 ml"
+            },
+            {
+                id: 7,
+                name: "Genesis Serum Anti-Chute Fortifiant",
+                category: "serum",
+                concern: "Rontok",
+                price: 890000,
+                rating: 4.9,
+                reviews: 88,
+                image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop",
+                description: "Serum harian untuk kulit kepala anti-hairfall. Memperkuat akar rambut, menenangkan kulit kepala, dan meminimalkan kerontokan harian.",
+                volume: "90 ml"
+            },
+            {
+                id: 8,
+                name: "Nutritive Fondant Magistral",
+                category: "conditioner",
+                concern: "Kering",
+                price: 560000,
+                rating: 4.7,
+                reviews: 53,
+                image: "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?q=80&w=800&auto=format&fit=crop",
+                description: "Kondisioner perawatan nutrisi mendalam untuk rambut kering. Memudahkan penyisiran dan membuat rambut terasa halus dan tampak sehat berkilau.",
+                volume: "200 ml"
+            }
+        ];
+
+        // State Management
+        let cart = [];
+        let currentCategory = 'all';
+
+        // Format IDR Currency
+        function formatIDR(amount) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount);
+        }
+
+        // Render Product Cards
+        function renderProducts(itemsToRender) {
+            const container = document.getElementById('product-grid');
+            const emptyState = document.getElementById('empty-state');
+            const countLabel = document.getElementById('product-count');
+
+            container.innerHTML = '';
+            
+            if (itemsToRender.length === 0) {
+                emptyState.classList.remove('hidden');
+                countLabel.innerText = '0 produk ditemukan';
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            countLabel.innerText = `Menampilkan ${itemsToRender.length} produk pilihan`;
+
+            itemsToRender.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative';
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="relative overflow-hidden bg-gray-50 aspect-square cursor-pointer" onclick="openProductModal(${product.id})">
+                            <img id="img-prod-${product.id}" src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/600x600/121212/D4AF37?text=${encodeURIComponent(product.name)}';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-gray-800 text-[10px] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider border border-gray-200">${product.concern}</span>
+                            
+                            <button onclick="event.stopPropagation(); changeProductImage(${product.id})" title="Ganti foto produk ini" class="absolute top-3 right-3 bg-dark/70 hover:bg-gold-500 text-white p-1.5 rounded-full text-[10px] opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                                <i class="fa-solid fa-camera"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="p-4">
+                            <div class="flex items-center text-amber-400 text-xs mb-1.5">
+                                <i class="fa-solid fa-star"></i>
+                                <span class="text-gray-700 font-bold ml-1">${product.rating}</span>
+                                <span class="text-gray-400 text-[11px] ml-1">(${product.reviews})</span>
+                            </div>
+                            
+                            <h3 onclick="openProductModal(${product.id})" class="font-serif font-semibold text-gray-900 text-sm md:text-base hover:text-gold-500 cursor-pointer line-clamp-1 transition-colors">${product.name}</h3>
+                            <p class="text-gray-500 text-xs line-clamp-2 mt-1 font-light">${product.description}</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 pt-0">
+                        <div class="flex items-center justify-between mt-2 pt-3 border-t border-gray-50">
+                            <div>
+                                <p class="text-[10px] text-gray-400 uppercase font-medium">Harga</p>
+                                <p class="text-sm md:text-base font-bold text-gray-900">${formatIDR(product.price)}</p>
+                            </div>
+                            <button onclick="addToCart(${product.id})" class="bg-cream hover:bg-gold-500 hover:text-white text-dark p-2.5 rounded-full transition-colors border border-gray-200 hover:border-gold-500" title="Tambah ke Keranjang">
+                                <i class="fa-solid fa-cart-plus text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Change Product Image
+        function changeProductImage(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const newUrl = prompt(`Masukkan URL Gambar baru untuk "${product.name}":`, product.image);
+            if (newUrl && newUrl.trim() !== "") {
+                product.image = newUrl.trim();
+                renderProducts(products);
+            }
+        }
+
+        // Filter Products
+        function filterProducts(category) {
+            currentCategory = category;
+            
+            const titleMap = {
+                'all': 'Semua Produk Kérastase',
+                'shampoo': 'Koleksi Bain (Sampo)',
+                'serum': 'Koleksi Serum & Hair Oil',
+                'mask': 'Koleksi Masque (Masker)',
+                'conditioner': 'Koleksi Fondant (Kondisioner)'
+            };
+            document.getElementById('category-title').innerText = titleMap[category] || 'Produk Kérastase';
+
+            const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+            renderProducts(filtered);
+            document.getElementById('concern-select').value = "";
+        }
+
+        function filterByConcern() {
+            const concern = document.getElementById('concern-select').value;
+            if (!concern) {
+                renderProducts(products);
+                return;
+            }
+            const filtered = products.filter(p => p.concern === concern);
+            document.getElementById('category-title').innerText = `Perawatan Khusus Rambut ${concern}`;
+            renderProducts(filtered);
+        }
+
+        // Live Search
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = products.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.description.toLowerCase().includes(query) ||
+                p.concern.toLowerCase().includes(query)
+            );
+            renderProducts(filtered);
+        }
+
+        function handleSearchMobile() {
+            const query = document.getElementById('search-input-mobile').value.toLowerCase();
+            const filtered = products.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.description.toLowerCase().includes(query)
+            );
+            renderProducts(filtered);
+        }
+
+        // Cart Operations
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const cartItem = cart.find(item => item.id === productId);
+
+            if (cartItem) {
+                cartItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            openCartDrawer();
+        }
+
+        function updateQuantity(productId, delta) {
+            const cartItem = cart.find(item => item.id === productId);
+            if (!cartItem) return;
+
+            cartItem.quantity += delta;
+            if (cartItem.quantity <= 0) {
+                cart = cart.filter(item => item.id !== productId);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const cartContainer = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const totalEl = document.getElementById('cart-total');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            if (totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            cartContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="fa-solid fa-bag-shopping text-4xl text-gray-200 mb-3"></i>
+                        <p class="text-xs text-gray-500">Keranjang Anda masih kosong</p>
+                    </div>
+                `;
+                subtotalEl.innerText = formatIDR(0);
+                totalEl.innerText = formatIDR(0);
+                return;
+            }
+
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                const itemEl = document.createElement('div');
+                itemEl.className = 'flex items-center space-x-3 p-3 bg-gray-50 rounded-xl border border-gray-100';
+                itemEl.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-xs text-gray-800 line-clamp-1">${item.name}</h4>
+                        <p class="text-[11px] text-gray-500 mt-0.5">${formatIDR(item.price)}</p>
+                        
+                        <div class="flex items-center justify-between mt-2">
+                            <div class="flex items-center border border-gray-200 rounded-md bg-white">
+                                <button onclick="updateQuantity(${item.id}, -1)" class="px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-100">-</button>
+                                <span class="px-2 text-xs font-semibold text-gray-800">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)" class="px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-100">+</button>
+                            </div>
+                            <span class="text-xs font-bold text-gray-900">${formatIDR(itemTotal)}</span>
+                        </div>
+                    </div>
+                `;
+                cartContainer.appendChild(itemEl);
+            });
+
+            subtotalEl.innerText = formatIDR(subtotal);
+            totalEl.innerText = formatIDR(subtotal);
+        }
+
+        // Cart Drawer
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartContainerEl = cartDrawer.querySelector('.id-cart-container');
+
+        function openCartDrawer() {
+            cartDrawer.classList.remove('opacity-0', 'pointer-events-none');
+            cartContainerEl.classList.remove('translate-x-full');
+        }
+
+        function closeCartDrawer() {
+            cartDrawer.classList.add('opacity-0', 'pointer-events-none');
+            cartContainerEl.classList.add('translate-x-full');
+        }
+
+        // Mobile Menu
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileContainer = mobileMenu.querySelector('.id-slide-container');
+
+        function toggleMobileMenu() {
+            if (mobileMenu.classList.contains('opacity-0')) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileContainer.classList.remove('-translate-x-full');
+            } else {
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                mobileContainer.classList.add('-translate-x-full');
+            }
+        }
+
+        // Product Modal
+        const productModal = document.getElementById('product-modal');
+        const modalContainer = productModal.querySelector('.id-modal-container');
+
+        function openProductModal(productId) {
+            const product = products.find(p => p.id === productId);
+            const content = document.getElementById('modal-content');
+
+            content.innerHTML = `
+                <div class="relative flex flex-col md:flex-row">
+                    <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 text-gray-500 hover:text-black bg-white/80 p-2 rounded-full backdrop-blur-sm"><i class="fa-solid fa-xmark text-lg"></i></button>
+                    
+                    <div class="md:w-1/2 bg-gray-50">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-64 md:h-full object-cover">
+                    </div>
+
+                    <div class="md:w-1/2 p-6 md:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-semibold text-gold-600 uppercase tracking-widest bg-gold-400/10 px-2.5 py-1 rounded-full border border-gold-400/20">${product.concern}</span>
+                                <button onclick="changeProductImage(${product.id})" class="text-xs text-gray-400 hover:text-gold-500"><i class="fa-solid fa-camera mr-1"></i>Ganti Gambar</button>
+                            </div>
+                            <h2 class="font-serif text-2xl font-bold text-gray-900 mt-3">${product.name}</h2>
+                            <p class="text-xs text-gray-400 mt-1">Ukuran: ${product.volume}</p>
+                            
+                            <div class="flex items-center text-amber-400 text-xs my-3">
+                                <i class="fa-solid fa-star"></i>
+                                <span class="text-gray-800 font-bold ml-1">${product.rating}</span>
+                                <span class="text-gray-400 ml-1">(${product.reviews} ulasan pelanggan)</span>
+                            </div>
+
+                            <p class="text-xs text-gray-600 leading-relaxed mt-2">${product.description}</p>
+
+                            <!-- AI Routine Section -->
+                            <div class="mt-4 pt-3 border-t border-gray-100">
+                                <button onclick="askAiProductRoutine(${product.id})" class="text-xs text-gold-600 hover:text-gold-700 font-medium flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-sparkles"></i>
+                                    <span>Tanya AI: Panduan Dosis & Rutinitas Pemakaian</span>
+                                </button>
+                                <div id="ai-routine-${product.id}" class="mt-2"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase">Harga Resmi</span>
+                                <p class="text-xl font-bold text-gray-900">${formatIDR(product.price)}</p>
+                            </div>
+                            <button onclick="addToCart(${product.id}); closeProductModal();" class="bg-gold-500 hover:bg-gold-600 text-white text-xs font-semibold px-6 py-3 rounded-xl shadow-md transition-all flex items-center space-x-2">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>+ Keranjang</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            productModal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContainer.classList.remove('scale-95');
+        }
+
+        function closeProductModal() {
+            productModal.classList.add('opacity-0', 'pointer-events-none');
+            modalContainer.classList.add('scale-95');
+        }
+
+        // Gemini AI Drawer Features
+        const aiDrawer = document.getElementById('ai-drawer');
+        const aiContainer = aiDrawer.querySelector('.id-ai-container');
+
+        function toggleAiDrawer() {
+            if (aiDrawer.classList.contains('opacity-0')) {
+                aiDrawer.classList.remove('opacity-0', 'pointer-events-none');
+                aiContainer.classList.remove('translate-x-full');
+            } else {
+                aiDrawer.classList.add('opacity-0', 'pointer-events-none');
+                aiContainer.classList.add('translate-x-full');
+            }
+        }
+
+        function appendUserMessage(text) {
+            const chatBody = document.getElementById('ai-chat-body');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = "flex justify-end";
+            msgDiv.innerHTML = `
+                <div class="bg-dark text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-xs shadow-sm">
+                    ${text}
+                </div>
+            `;
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function appendAiMessage(text, isLoading = false) {
+            const chatBody = document.getElementById('ai-chat-body');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = "flex justify-start";
+            const id = "ai-msg-" + Date.now();
+            msgDiv.id = id;
+
+            if (isLoading) {
+                msgDiv.innerHTML = `
+                    <div class="bg-white p-3.5 rounded-2xl rounded-tl-none border border-gray-100 max-w-[85%] text-xs shadow-sm flex items-center space-x-2 text-gray-500">
+                        <i class="fa-solid fa-circle-notch fa-spin text-gold-500"></i>
+                        <span>Menganalisis kondisi rambut Anda...</span>
+                    </div>
+                `;
+            } else {
+                const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                msgDiv.innerHTML = `
+                    <div class="bg-white p-3.5 rounded-2xl rounded-tl-none border border-gray-100 max-w-[85%] text-xs shadow-sm text-gray-800 space-y-1">
+                        <div class="text-[10px] font-bold text-gold-600 uppercase tracking-wider mb-1"><i class="fa-solid fa-sparkles mr-1"></i>Rekomendasi Hair Specialist</div>
+                        <div>${formatted}</div>
+                    </div>
+                `;
+            }
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+            return id;
+        }
+
+        async function handleAiConsultation() {
+            const inputEl = document.getElementById('ai-input');
+            const query = inputEl.value.trim();
+            if (!query) return;
+
+            inputEl.value = '';
+            appendUserMessage(query);
+
+            const loadingId = appendAiMessage('', true);
+
+            const systemPrompt = `Anda adalah konsultan kecantikan dan spesialis perawatan rambut resmi profesional Kérastase Paris.
+Tugas Anda adalah mendiagnosis keluhan pengguna dan memberikan saran produk Kérastase yang cocok dari daftar catalog berikut:
+${JSON.stringify(products.map(p => ({id: p.id, nama: p.name, kategori: p.category, kendala: p.concern, deskripsi: p.description})))}
+
+Aturan Respons:
+1. Berikan jawaban yang ramah, profesional, serta solutif dalam bahasa Indonesia.
+2. Sebutkan nama produk Kérastase yang tepat yang harus mereka gunakan beserta cara aplikasinya.
+3. Buatlah respons singkat, padat, dan mudah dibaca (gunakan poin-poin bila perlu).`;
+
+            try {
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: query }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                const result = await response.json();
+                const aiResponse = result.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, terjadi kendala saat memproses analisis rambut. Silakan coba lagi.";
+
+                const loadingNode = document.getElementById(loadingId);
+                if (loadingNode) {
+                    const formatted = aiResponse.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                    loadingNode.innerHTML = `
+                        <div class="bg-white p-3.5 rounded-2xl rounded-tl-none border border-gray-100 max-w-[85%] text-xs shadow-sm text-gray-800 space-y-1">
+                            <div class="text-[10px] font-bold text-gold-600 uppercase tracking-wider mb-1"><i class="fa-solid fa-sparkles mr-1"></i>Rekomendasi Hair Specialist</div>
+                            <div>${formatted}</div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                const loadingNode = document.getElementById(loadingId);
+                if (loadingNode) {
+                    loadingNode.innerHTML = `<div class="bg-red-50 text-red-600 p-3 rounded-xl text-xs">Gagal menghubungi AI. Pastikan koneksi internet Anda lancar.</div>`;
+                }
+            }
+        }
+
+        function sendQuickAiQuery(text) {
+            document.getElementById('ai-input').value = text;
+            handleAiConsultation();
+        }
+
+        async function askAiProductRoutine(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const targetDiv = document.getElementById(`ai-routine-${productId}`);
+            if (!targetDiv) return;
+
+            targetDiv.innerHTML = `<p class="text-xs text-gold-600 flex items-center"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Menggenerasi rekomendasi rutinitas pemakaian...</p>`;
+
+            const systemPrompt = "Anda adalah Hair Care Specialist Kérastase. Berikan tips singkat 3 langkah praktis tentang: 1. Cara pakai dosis tepat, 2. Waktu/frekuensi terbaik, 3. Produk kombinasi terbaik untuk hasil optimal.";
+            const userQuery = `Bagaimana rutinitas dan tata cara penggunaan terbaik untuk produk Kérastase "${product.name}" (${product.description})?`;
+
+            try {
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                const result = await response.json();
+                const aiText = result.candidates?.[0]?.content?.parts?.[0]?.text || "Gagal memuat rekomendasi rutinitas.";
+
+                const formatted = aiText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                targetDiv.innerHTML = `
+                    <div class="bg-cream p-3 rounded-xl border border-gold-200 text-xs text-gray-700 space-y-1">
+                        <div class="font-bold text-gold-600 flex items-center text-[11px] mb-1"><i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Panduan Pakai & Kombinasi AI</div>
+                        <p>${formatted}</p>
+                    </div>
+                `;
+            } catch (error) {
+                targetDiv.innerHTML = `<p class="text-xs text-red-500">Terjadi kesalahan saat memuat tips AI.</p>`;
+            }
+        }
+
+        const checkoutModal = document.getElementById('checkout-modal');
+
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                alert('Keranjang Anda masih kosong. Silakan pilih produk terlebih dahulu.');
+                return;
+            }
+
+            closeCartDrawer();
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('checkout-total-price').innerText = formatIDR(total);
+
+            checkoutModal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeCheckoutModal() {
+            checkoutModal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function handleCheckoutSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const address = document.getElementById('cust-address').value;
+            const payment = document.getElementById('cust-payment').value;
+
+            let total = 0;
+            let orderSummary = "";
+
+            cart.forEach((item, index) => {
+                const sub = item.price * item.quantity;
+                total += sub;
+                orderSummary += `${index + 1}. ${item.name} (${item.quantity}x) = ${formatIDR(sub)}\n`;
+            });
+
+            const message = `Halo Admin Kérastase Official Store,\nSaya ingin melakukan pemesanan berikut:\n\n*DETAIL PESANAN:*\n${orderSummary}\n*Total Pembayaran:* ${formatIDR(total)}\n\n*DATA PEMESAN:*\n• Nama: ${name}\n• No HP: ${phone}\n• Alamat: ${address}\n• Metode Pembayaran: ${payment}\n\nMohon diinfokan nomor rekening & proses selanjutnya. Terima kasih!`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const waNumber = "6281234567890";
+            
+            window.open(`https://wa.me/${waNumber}?text=${encodedMessage}`, '_blank');
+
+            cart = [];
+            updateCartUI();
+            closeCheckoutModal();
+        }
+
+        // Initialize App
+        window.onload = function() {
+            renderProducts(products);
+        }
+    </script>
+</body>
+</html>
